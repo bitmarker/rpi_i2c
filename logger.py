@@ -30,7 +30,7 @@ class Logger(threading.Thread):
             sens.connect()
    
         # Open the file
-        self.file = open(self.filename, 'w')
+        self.file = open(self.filename, 'a')
         
         # Intialize the logger
         self.csv = csv.writer(self.file, delimiter=';', quotechar='"')
@@ -50,9 +50,11 @@ class Logger(threading.Thread):
             self.csv.writerow(str_values)
             time.sleep(self.cycle)
         else:
+            print("\nStopping...")
             for sens in self.sensor_list:
                 print("Disconnecting sensor {0}...".format(sens.name))
                 sens.disconnect()
+            print("Closing file...")
             self.file.close()
 
     def stop(self):
@@ -61,7 +63,6 @@ class Logger(threading.Thread):
 if __name__ == '__main__':
     logger = Logger('output/log.csv')
     
-    logger.add_sensor(DummySensor())
     logger.add_sensor(MC9808())
     
     logger.start()

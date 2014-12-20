@@ -1,3 +1,5 @@
+import smbus
+
 class GenericSensor():
     name = "Unknown"
     def __init__(self):
@@ -8,7 +10,11 @@ class GenericSensor():
         pass
 
 class I2CSensor(GenericSensor):
+    bus = None
+
     def connect(self):
-        pass
+        if I2CSensor.bus == None:
+            I2CSensor.bus = smbus.SMBus(1)
+    
     def disconnect(self):
         pass
